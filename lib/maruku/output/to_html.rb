@@ -420,16 +420,31 @@ It is copied as a standard HTML attribute.
 		# altri
 		[['em','code','strong','hr','span','dl','dd','dt'], attrs]
 	].each do |el, a| [*el].each do |e| HTML4Attributes[e] = a end end
-		
+
+        HTML5DataPrefix = "data-"
+        def html5_data_attribute? att
+          if att.kind_of? Symbol
+            att = att.to_s
+          end
+          if (att.start_with? HTML5DataPrefix) and (att.length > HTML5DataPrefix.length)
+            return true
+          end
+          false
+        end
 		
 	def create_html_element(name, attributes_to_copy=[])
 		m = Element.new name
 			if atts = HTML4Attributes[name] then 
-				atts.each do |att|
-					if v = @attributes[att] then 
-						m.attributes[att.to_s] = v.to_s 
-					end
-				end
+                                @attributes.keys.each do |att|
+                                       if (atts.include? att) or (html5_data_attribute? att)
+                                               m.attributes[att.to_s] = @attributes[att].to_s
+                                       end
+                                end
+#				atts.each do |att|
+#					if v = @attributes[att] then 
+#						m.attributes[att.to_s] = v.to_s 
+#					end
+#				end
 			else
 			#	puts "not atts for #{name.inspect}"
 			end
