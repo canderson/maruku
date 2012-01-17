@@ -1,5 +1,5 @@
 
-require 'lib/maruku/version'
+require_relative 'lib/maruku/version'
 
 $spec = Gem::Specification.new do |s|
   s.name = 'maruku'
